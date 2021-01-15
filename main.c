@@ -1,4 +1,5 @@
 #include "config.h"
+#include "map.h"
 #include "path.h"
 
 waypoint_t *path;

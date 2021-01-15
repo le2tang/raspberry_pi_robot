@@ -2,7 +2,6 @@
 #define PATH_H_
 
 #include <stdbool.h>
-#include <stddef.h>
 
 typedef struct {
   float x;
@@ -31,15 +30,7 @@ int sign(float x) {
   return 0;
 }
 
-extern map_t interest_map;
-
-bool map_inbounds(map_t *map, size_t row, size_t col);
-float map_get(map_t *map, size_t row, size_t col);
-float mat_set(map_t *map, size_t row, size_t col, float data);
-
-void init_interest_map(map_t *map, size_t nrows, size_t ncols, float xdelta, float ydelta);
-void update_interest_map(map_t *map, pose_t robot_pose, float decay);
-
+pose_t rotate(pose_t pose, float angle);
 float pose_distance(pose_t pose1, pose_t pose2);
 bool pose_near(pose_t pose1, pose_t pose2, float position_tol, float angle_tol);
 bool position_near(pose_t pose1, pose_t pose2, float position_tol);
