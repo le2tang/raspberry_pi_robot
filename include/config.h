@@ -1,3 +1,6 @@
+#ifndef CONFIG_H_
+#define CONFIG_H_
+
 #define TIMESTEP 0.01
 
 #define LMTR_FWD 0 // Left motor forwards pin
@@ -18,3 +21,5 @@
 #define INTEREST_MAP_DX 0.05 // m
 #define INTEREST_MAP_DY 0.05 // m
 #define INTEREST_MAP_DECAY 0.1
+
+#endif

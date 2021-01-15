@@ -1,3 +1,6 @@
+#ifndef PATH_H_
+#define PATH_H_
+
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -17,15 +20,6 @@ typedef struct {
   waypoint_t *prev;
   waypoint_t *next;
 } waypoint_t;
-
-typedef struct {
-  float *data;
-  size_t nrows;
-  size_t ncols;
-  float xdelta;
-  float ydelta;
-  pose_t pose;
-} map_t;
 
 int sign(float x) {
   if (x < 0) {
@@ -54,3 +48,5 @@ unicycle_t get_controls(pose_t current, pose_t target, unicycle_t limits);
 void set_motors(unicycle_t controls, float body_width, float wheel_radius);
 void update_state(pose_t *state, unicycle_t controls, float dt);
 void set_waypoint(waypoint_t *path, pose_t target);
+
+#endif
