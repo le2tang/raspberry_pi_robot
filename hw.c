@@ -1,6 +1,6 @@
 #include "hw.h"
 
-#include <math.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 
 #include "config.h"
@@ -21,11 +21,11 @@ void motors_set(float left_pwr, float right_pwr) {
   unsigned int left_pwm = 1023 * abs(left_pwr);
   unsigned int right_pwm = 1023 * abs(right_pwr);
   
-  if (left_pwr > pwr_tol) {
+  if (left_pwr > ZERO_PWR_TOL) {
     digitalWrite(LMTR_FWD, HIGH);
     digitalWrite(LMTR_BCK, LOW);
   }
-  else if (left_pwr < -pwrt_tol) {
+  else if (left_pwr < -ZERO_PWR_TOL) {
     digitalWrite(LMTR_FWD, LOW);
     digitalWrite(LMTR_BCK, HIGH);
   }
@@ -34,11 +34,11 @@ void motors_set(float left_pwr, float right_pwr) {
     digitalWrite(LMTR_BCK, LOW);
   }
 
-  if (right_pwr > pwr_tol) {
+  if (right_pwr > ZERO_PWR_TOL) {
     digitalWrite(RMTR_FWD, HIGH);
     digitalWrite(RMTR_BCK, LOW);
   }
-  else if (right_pwr < -pwrt_tol) {
+  else if (right_pwr < -ZERO_PWR_TOL) {
     digitalWrite(RMTR_FWD, LOW);
     digitalWrite(RMTR_BCK, HIGH);
   }
