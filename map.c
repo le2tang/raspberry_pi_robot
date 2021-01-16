@@ -2,64 +2,64 @@
 
 #include "path.h"
 
-bool map_inbounds(map_t *map, size_t row, size_t col) {
-  return (row < map->nrows && col < map->ncols);
+bool map_inbounds(map *m, size_t row, size_t col) {
+  return (row < m->nrows && col < m->ncols);
 }
 
-float map_get(map_t *map, size_t row, size_t col) {
-  return map->data[row * map->ncols + col];
+float map_get(map *m, size_t row, size_t col) {
+  return m->data[row * m->ncols + col];
 }
 
-void map_set(map_t *map, size_t row, size_t col, float data) {
-  map->data[row * map->ncols + col] = data;
+void map_set(map *m, size_t row, size_t col, float data) {
+  m->data[row * m->ncols + col] = data;
 }
 
-size_t map_get_index(map_t *map, size_t row, size_t col) {
-  return row * map->ncols + col;
+size_t map_get_index(map *m, size_t row, size_t col) {
+  return row * m->ncols + col;
 }
 
-pose_t pose2map_indices(pose_t pose, map_t *map) {
-  pose_t map_pose = {
-    pose.x - map->pose.x,
-    pose.y - map->pose.y,
+pose pose2map_indices(pose p, map *m) {
+  pose map_pose = {
+    p.x - m->origin.x,
+    p.y - m->origin.y,
     0
   };
 
-  float rot_angle = map->pose.theta - pose.theta;
+  float rot_angle = m->origin.theta - p.theta;
   map_pose = rotate(map_pose, rot_angle);
   
-  map_pose.x /= map->xdelta;
-  map_pose.y /= map->ydelta;
+  map_pose.x /= m->xdelta;
+  map_pose.y /= m->ydelta;
   return map_pose;
 }
 
-void interest_map_init(map_t *map, size_t nrows, size_t ncols, float xdelta, float ydelta) {
-  map->data = malloc(sizeof(float) * nrows * ncols);
-  map->nrows = nrows;
-  map->ncols = ncols;
-  map->xdelta = xdelta;
-  map->ydelta = ydelta;
-  map->pose.x = 0;
-  map->pose.y = 0;
-  map->pose.theta = 0;
+void interest_map_init(map *interest_map, size_t nrows, size_t ncols, float xdelta, float ydelta) {
+  interest_map->data = malloc(sizeof(float) * nrows * ncols);
+  interest_map->nrows = nrows;
+  interest_map->ncols = ncols;
+  interest_map->xdelta = xdelta;
+  interest_map->ydelta = ydelta;
+  interest_map->origin.x = 0;
+  interest_map->origin.y = 0;
+  interest_map->origin.theta = 0;
 }
 
-void interest_map_update(map_t *map, pose_t robot_pose, float max_interest, float decay) {
-  pose_t map_indices = pose2map_indices(robot_pose, map);
+void interest_map_update(map *interest_map, pose robot_pose, float max_interest, float decay) {
+  pose map_indices = pose2map_indices(robot_pose, interest_map);
 
   for (int i = -1; i < 2; ++i) {
     for (int j = -1; j < 2; ++j) {
-      if (map_inbounds(map, map_indices.x + i, map_indices.y + j)) {
-        map_set(map, map_indices.x + i, map_indices.y + j, max_interest);
+      if (map_inbounds(interest_map, map_indices.x + i, map_indices.y + j)) {
+        map_set(interest_map, map_indices.x + i, map_indices.y + j, max_interest);
       }
     }
   }
 
-  for (size_t i = 0; i < map->nrows; ++i) {
-    for (size_t j = 0; j < map->ncols; ++j) {
-        float current_interest = map_get(map, map_indices.x + i, map_indices.y + j);
+  for (size_t i = 0; i < interest_map->nrows; ++i) {
+    for (size_t j = 0; j < interest_map->ncols; ++j) {
+        float current_interest = map_get(interest_map, map_indices.x + i, map_indices.y + j);
         float new_interest = max(0, current_interest - decay);
-        map_set(map, i, j, new_interest);
+        map_set(interest_map, i, j, new_interest);
     }
   }
 }

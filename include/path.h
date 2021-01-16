@@ -3,22 +3,22 @@
 
 #include <stdbool.h>
 
-typedef struct {
+typedef struct pose {
   float x;
   float y;
   float theta;
-} pose_t;
+} pose;
 
-typedef struct {
+typedef struct unicycle {
   float v;
   float w;
-} unicycle_t;
+} unicycle;
 
-typedef struct {
-  pose_t pose;
-  waypoint_t *prev;
-  waypoint_t *next;
-} waypoint_t;
+typedef struct waypoint {
+  pose target;
+  struct waypoint *prev;
+  struct waypoint *next;
+} waypoint;
 
 int sign(float x) {
   if (x < 0) {
@@ -30,17 +30,17 @@ int sign(float x) {
   return 0;
 }
 
-pose_t rotate(pose_t pose, float angle);
-float pose_distance(pose_t pose1, pose_t pose2);
-bool pose_near(pose_t pose1, pose_t pose2, float position_tol, float angle_tol);
-bool position_near(pose_t pose1, pose_t pose2, float position_tol);
+pose rotate(pose p, float angle);
+float pose_distance(pose p1, pose p2);
+bool pose_near(pose p1, pose p2, float position_tol, float angle_tol);
+bool position_near(pose p1, pose p2, float position_tol);
 
-unicycle_t get_controls(pose_t current, pose_t target, unicycle_t limits);
-void set_motors(unicycle_t controls, float body_width, float wheel_radius);
-void update_state(pose_t *state, unicycle_t controls, float dt);
+unicycle get_controls(pose curr, pose target, unicycle limits);
+void set_motors(unicycle controls, float body_width, float wheel_radius);
+void update_state(pose *state, unicycle controls, float dt);
 
-void waypoint_init(waypoint_t *path, pose_t pose, waypoint_t *prev, waypoint_t *next);
-void waypoint_set_prev(waypoint_t *waypoint, pose_t target);
-void waypoint_set_next(waypoint_t * waypoint, pose_t target);
+void waypoint_init(waypoint *new_waypoint, pose target, waypoint *prev, waypoint *next);
+void waypoint_set_prev(waypoint *curr, pose target);
+void waypoint_set_next(waypoint *curr, pose target);
 
 #endif

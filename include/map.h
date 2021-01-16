@@ -5,23 +5,21 @@
 
 #include "path.h"
 
-typedef struct {
+typedef struct map {
   float *data;
   size_t nrows;
   size_t ncols;
   float xdelta;
   float ydelta;
-  pose_t pose;
-} map_t;
+  pose origin;
+} map;
 
-extern map_t interest_map;
+extern inline bool map_inbounds(map *m, size_t row, size_t col);
+extern inline float map_get(map *m, size_t row, size_t col);
+extern inline float mat_set(map *m, size_t row, size_t col, float data);
+extern inline size_t map_get_index(map *m, size_t row, size_t col);
 
-extern inline bool map_inbounds(map_t *map, size_t row, size_t col);
-extern inline float map_get(map_t *map, size_t row, size_t col);
-extern inline float mat_set(map_t *map, size_t row, size_t col, float data);
-extern inline size_t map_get_index(map_t *map, size_t row, size_t col);
-
-void interest_map_init(map_t *map, size_t nrows, size_t ncols, float xdelta, float ydelta);
-void interest_map_update(map_t *map, pose_t robot_pose, float max_interest, float decay);
+void interest_map_init(map *interest_map, size_t nrows, size_t ncols, float xdelta, float ydelta);
+void interest_map_update(map *interest_map, pose robot_pose, float max_interest, float decay);
 
 #endif

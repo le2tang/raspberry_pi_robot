@@ -4,20 +4,20 @@
 #include "map.h"
 #include "path.h"
 
-pose_t robot_pose;
-const unicycle_t control_limits = {0.1, 0.1};
-map_t interest_map;
+pose robot_pose;
+const unicycle control_limits = {0.1, 0.1};
+map interest_map;
 
-static pose_t default_path[4] = {
+static pose default_path[4] = {
   {0.1, 0.1, M_PI/4.0},
   {0.2, 0.2, -M_PI},
   {0.1, 0.1, -3.0*M_PI/4.0},
   {0, 0, 0}
 };
 const size_t num_waypoints = 4;
-waypoint_t path[4];
+waypoint path[4];
 
-waypoint_t *curr_waypoint;
+waypoint *curr_waypoint;
 
 static void init() {
   interest_map_init(&interest_map, INTEREST_MAP_NROWS, INTEREST_MAP_NCOLS, INTEREST_MAP_DX, INTEREST_MAP_DY);
@@ -46,7 +46,7 @@ int main(void) {
       // go to next waypoint
 
       // calculate [v, omega] from pose to waypoint
-      unicycle_t controls = get_controls(robot_pose, path->pose, control_limits);
+      unicycle controls = get_controls(robot_pose, path->pose, control_limits);
 
       // calculate [vr, vl], send to motor controller
       set_motors(controls, ROBOT_BODY_WIDTH, ROBOT_WHEEL_RADIUS);
@@ -60,7 +60,7 @@ int main(void) {
       interest_map_update(&interest_map, robot_pose, INTEREST_MAP_MAX, INTEREST_MAP_DECAY);
 
       // check if near a waypoint, update waypoints
-      if (pose_near(robot_pose, path->pose, WAYPOINT_NEAR_POS_TOL, WAYPOINT_NEAR_ANG_TOL)) {
+      if (pose_near(robot_pose, curr_waypoint->target, WAYPOINT_NEAR_POS_TOL, WAYPOINT_NEAR_ANG_TOL)) {
         curr_waypoint = curr_waypoint->next;
       }
     }
