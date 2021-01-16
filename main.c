@@ -46,7 +46,7 @@ int main(void) {
       // go to next waypoint
 
       // calculate [v, omega] from pose to waypoint
-      unicycle controls = get_controls(robot_pose, path->pose, control_limits);
+      unicycle controls = get_controls(robot_pose, curr_waypoint->target, control_limits);
 
       // calculate [vr, vl], send to motor controller
       set_motors(controls, ROBOT_BODY_WIDTH, ROBOT_WHEEL_RADIUS);
