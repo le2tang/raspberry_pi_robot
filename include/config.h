@@ -11,7 +11,8 @@
 #define LMTR_PWM 4 // Left motor PWM pin
 #define RMTR_PWM 5 // Right motor PWM pin
 
-#define NEAR_WAYPOINT_TOL 0.05 // m
+#define WAYPOINT_NEAR_POS_TOL 0.05 // m
+#define WAYPOINT_NEAR_ANG_TOL 0.01 // rad
 
 #define ROBOT_BODY_WIDTH 0.1 // m
 #define ROBOT_WHEEL_RADIUS 0.04 // m
@@ -20,6 +21,7 @@
 #define INTEREST_MAP_NCOLS 10
 #define INTEREST_MAP_DX 0.05 // m
 #define INTEREST_MAP_DY 0.05 // m
-#define INTEREST_MAP_DECAY 0.1
+#define INTEREST_MAP_MAX 1.0
+#define INTEREST_MAP_DECAY 0.01
 
 #endif

@@ -38,6 +38,9 @@ bool position_near(pose_t pose1, pose_t pose2, float position_tol);
 unicycle_t get_controls(pose_t current, pose_t target, unicycle_t limits);
 void set_motors(unicycle_t controls, float body_width, float wheel_radius);
 void update_state(pose_t *state, unicycle_t controls, float dt);
-void set_waypoint(waypoint_t *path, pose_t target);
+
+void waypoint_init(waypoint_t *path, pose_t pose, waypoint_t *prev, waypoint_t *next);
+void waypoint_set_prev(waypoint_t *waypoint, pose_t target);
+void waypoint_set_next(waypoint_t * waypoint, pose_t target);
 
 #endif

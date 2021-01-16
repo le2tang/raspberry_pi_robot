@@ -8,7 +8,7 @@ const unicycle_t control_limits = {0.1, 0.1};
 map_t interest_map;
 
 void init() {
-  init_interest_map(&interest_map, INTEREST_MAP_NROWS, INTEREST_MAP_NCOLS, INTEREST_MAP_DX, INTEREST_MAP_DY);
+  interest_map_init(&interest_map, INTEREST_MAP_NROWS, INTEREST_MAP_NCOLS, INTEREST_MAP_DX, INTEREST_MAP_DY);
 }
 
 int main(void) {
@@ -31,17 +31,19 @@ int main(void) {
 
 
       // update interest map
-      update_interest_map(&interest_map, robot_pose, INTEREST_MAP_DECAY);
+      interest_map_update(&interest_map, robot_pose, INTEREST_MAP_MAX, INTEREST_MAP_DECAY);
 
       // check if near a waypoint, update waypoints
-      if (pose_near(robot_pose, path->pose, NEAR_WAYPOINT_TOL)) {
+      if (pose_near(robot_pose, path->pose, WAYPOINT_NEAR_POS_TOL, WAYPOINT_NEAR_ANG_TOL)) {
         next_waypoint(path);
       }
     }
     else {
       // Pick pose based on interest in the map
-      ;
-      set_waypoint(path);
+      pose_t target_pose;
+      
+      waypoint_t new_waypoint;
+      waypoint_init(&new_waypoint, target_pose, 0, 0);
     }
   }
 }

@@ -27,7 +27,7 @@ pose_t pose2map_indices(pose_t pose, map_t *map) {
   return map_pose;
 }
 
-void init_interest_map(map_t *map, size_t nrows, size_t ncols, float xdelta, float ydelta) {
+void interest_map_init(map_t *map, size_t nrows, size_t ncols, float xdelta, float ydelta) {
   map->data = malloc(sizeof(float) * nrows * ncols);
   map->nrows = nrows;
   map->ncols = ncols;
@@ -38,16 +38,22 @@ void init_interest_map(map_t *map, size_t nrows, size_t ncols, float xdelta, flo
   map->pose.theta = 0;
 }
 
-void update_interest_map(map_t *map, pose_t robot_pose, float decay) {
+void interest_map_update(map_t *map, pose_t robot_pose, float max_interest, float decay) {
   pose_t map_indices = pose2map_indices(robot_pose, map);
 
   for (int i = -1; i < 2; ++i) {
     for (int j = -1; j < 2; ++j) {
       if (map_inbounds(map, map_indices.x + i, map_indices.y + j)) {
+        map_set(map, map_indices.x + i, map_indices.y + j, max_interest);
+      }
+    }
+  }
+
+  for (size_t i = 0; i < map->nrows; ++i) {
+    for (size_t j = 0; j < map->ncols; ++j) {
         float current_interest = map_get(map, map_indices.x + i, map_indices.y + j);
         float new_interest = max(0, current_interest - decay);
-        map_set(map, map_indices.x + i, map_indices.y + j, new_interest);
-      }
+        map_set(map, i, j, new_interest);
     }
   }
 }

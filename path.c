@@ -59,12 +59,27 @@ void update_state(pose_t *state, unicycle_t controls, float dt) {
   state->theta += derivative.theta * dt;
 }
 
-void set_waypoint(waypoint_t *path, pose_t target) {
-  waypoint_t *new_waypoint = malloc(sizeof(waypoint_t));
-  new_waypoint->pose = target;
-  new_waypoint->prev = path;
-  new_waypoint->next = 0;
+void waypoint_init(waypoint_t *waypoint, pose_t pose, waypoint_t *prev, waypoint_t *next) {
+  if (waypoint) {
+    free(waypoint);
+  }
 
-  path->next = new_waypoint;
-  path = new_waypoint;
+  waypoint = malloc(sizeof(waypoint_t));
+  waypoint->pose = pose;
+  waypoint->prev = prev;
+  waypoint->next = next;
+}
+
+void waypoint_set_prev(waypoint_t *waypoint, pose_t pose) {
+  waypoint_t new_waypoint;
+  waypoint_init(&new_waypoint, pose, waypoint->prev, waypoint);
+
+  waypoint->prev = &new_waypoint;
+}
+
+void waypoint_set_next(waypoint_t * waypoint, pose_t pose) {
+  waypoint_t new_waypoint;
+  waypoint_init(&new_waypoint, pose, waypoint, waypoint->next);
+
+  waypoint->next = &new_waypoint;
 }
