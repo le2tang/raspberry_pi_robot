@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "config.h"
+#include "hw.h"
 
 pose_t rotate(pose_t pose, float angle) {
   pose_t rotated_pose = {
@@ -20,11 +21,11 @@ float pose_distance(pose_t pose1, pose_t pose2) {
 }
 
 bool pose_near(pose_t pose1, pose_t pose2, float position_tol, float angle_tol) {
-  return (abs(pose1.theta - pose2.theta) < angle_tol) && position_near(pose1, pose2, position_tol);
+  return (abs(pose1.theta - pose2.theta) <= angle_tol) && position_near(pose1, pose2, position_tol);
 }
 
 bool position_near(pose_t pose1, pose_t pose2, float position_tol) {
-  return pose_distance(pose1, pose2) < position_tol;
+  return pose_distance(pose1, pose2) <= position_tol;
 }
 
 unicycle_t get_controls(pose_t current, pose_t target, unicycle_t limits) {
@@ -40,11 +41,10 @@ unicycle_t get_controls(pose_t current, pose_t target, unicycle_t limits) {
 }
 
 void set_motors(unicycle_t controls, float body_width, float wheel_radius) {
-  float left_wheel = (controls.v + 0.5 * body_width * controls.w) / wheel_radius;
-  float right_wheel = (controls.v - 0.5 * body_width * controls.w) / wheel_radius;
+  float left_wheel = (controls.v + 0.5 * body_width * controls.w) / wheel_radius / controls.v;
+  float right_wheel = (controls.v - 0.5 * body_width * controls.w) / wheel_radius / controls.v;
   
-  lmtr_pwr(left_wheel);
-  rmtr_pwr(right_wheel);
+  motors_set(left_wheel, right_wheel);
 }
 
 void update_state(pose_t *state, unicycle_t controls, float dt) {

@@ -1,5 +1,7 @@
 #include "map.h"
 
+#include "path.h"
+
 bool map_inbounds(map_t *map, size_t row, size_t col) {
   return (row < map->nrows && col < map->ncols);
 }
@@ -10,6 +12,10 @@ float map_get(map_t *map, size_t row, size_t col) {
 
 void map_set(map_t *map, size_t row, size_t col, float data) {
   map->data[row * map->ncols + col] = data;
+}
+
+size_t map_get_index(map_t *map, size_t row, size_t col) {
+  return row * map->ncols + col;
 }
 
 pose_t pose2map_indices(pose_t pose, map_t *map) {
