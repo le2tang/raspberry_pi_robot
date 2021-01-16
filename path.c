@@ -1,6 +1,7 @@
 #include "path.h"
 
 #include <math.h>
+#include <stdlib.h>
 
 #include "config.h"
 #include "hw.h"

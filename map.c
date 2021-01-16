@@ -2,19 +2,19 @@
 
 #include "path.h"
 
-bool map_inbounds(map *m, size_t row, size_t col) {
+inline bool map_inbounds(map *m, size_t row, size_t col) {
   return (row < m->nrows && col < m->ncols);
 }
 
-float map_get(map *m, size_t row, size_t col) {
+inline float map_get(map *m, size_t row, size_t col) {
   return m->data[row * m->ncols + col];
 }
 
-void map_set(map *m, size_t row, size_t col, float data) {
+inline void map_set(map *m, size_t row, size_t col, float data) {
   m->data[row * m->ncols + col] = data;
 }
 
-size_t map_get_index(map *m, size_t row, size_t col) {
+inline size_t map_get_index(map *m, size_t row, size_t col) {
   return row * m->ncols + col;
 }
 
