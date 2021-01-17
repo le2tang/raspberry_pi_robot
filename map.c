@@ -1,20 +1,22 @@
 #include "map.h"
 
+#include <stdlib.h>
+
 #include "path.h"
 
-inline bool map_inbounds(map *m, size_t row, size_t col) {
+bool map_inbounds(map *m, size_t row, size_t col) {
   return (row < m->nrows && col < m->ncols);
 }
 
-inline float map_get(map *m, size_t row, size_t col) {
+float map_get(map *m, size_t row, size_t col) {
   return m->data[row * m->ncols + col];
 }
 
-inline void map_set(map *m, size_t row, size_t col, float data) {
+void map_set(map *m, size_t row, size_t col, float data) {
   m->data[row * m->ncols + col] = data;
 }
 
-inline size_t map_get_index(map *m, size_t row, size_t col) {
+size_t map_get_index(map *m, size_t row, size_t col) {
   return row * m->ncols + col;
 }
 
@@ -58,7 +60,7 @@ void interest_map_update(map *interest_map, pose robot_pose, float max_interest,
   for (size_t i = 0; i < interest_map->nrows; ++i) {
     for (size_t j = 0; j < interest_map->ncols; ++j) {
         float current_interest = map_get(interest_map, map_indices.x + i, map_indices.y + j);
-        float new_interest = max(0, current_interest - decay);
+        float new_interest = (current_interest - decay > 0) ? (current_interest - decay) : 0;
         map_set(interest_map, i, j, new_interest);
     }
   }

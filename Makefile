@@ -7,4 +7,4 @@ $(TARGET): $(OBJECTS)
 	gcc $^ -o $@
 
 %.o: %.c
-	gcc -c -Iinclude $< -o $@
+	gcc -c -Iinclude -I/usr/local/include -L/usr/local/lib -lwiringPi $< -o $@

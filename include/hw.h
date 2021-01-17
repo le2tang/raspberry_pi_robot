@@ -4,6 +4,6 @@
 #define ZERO_PWR_TOL 0.05
 
 void init_hw();
-void motor_set(float left_pwr, float right_pwr);
+void motors_set(float left_pwr, float right_pwr);
 
 #endif

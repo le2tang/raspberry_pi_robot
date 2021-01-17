@@ -31,12 +31,16 @@ bool position_near(pose p1, pose p2, float position_tol) {
 
 unicycle get_controls(pose curr, pose target, unicycle limits) {
   float distance = pose_distance(target, curr);
-  float ang_distance = abs(target.theta - curr.theta);
-  int ang_direction = sign(target.theta - curr.theta);
+  float ang_distance = target.theta - curr.theta;
+  int ang_direction = 0;
+  if (ang_distance > 0)
+    ang_direction = 1;
+  else if (ang_distance < 0)
+    ang_direction = -1;
 
   unicycle controls = {
-    min(distance, limits.v),
-    ang_direction * min(ang_distance, limits.w)
+    (abs(distance) < limits.v) ? abs(distance) : limits.v,
+    ang_direction * ((ang_distance < limits.w) ? ang_distance : limits.w)
   };
   return controls;
 }
@@ -60,17 +64,15 @@ void update_state(pose *state, unicycle controls, float dt) {
   state->theta += derivative.theta * dt;
 }
 
-void waypoint_init(waypoint *new_waypoint, pose target, waypoint *prev, waypoint *next) {
-  if (new_waypoint) {
-    free(new_waypoint);
-  }
-
-  new_waypoint = malloc(sizeof(waypoint));
+waypoint *waypoint_init(pose target, waypoint *prev, waypoint *next) {
+  waypoint *new_waypoint = malloc(sizeof(waypoint));
   new_waypoint->target.x = target.x;
   new_waypoint->target.y = target.y;
   new_waypoint->target.theta = target.theta;
   new_waypoint->prev = prev;
   new_waypoint->next = next;
+
+  return new_waypoint;
 }
 
 void waypoint_set_prev(waypoint *curr, pose target) {

@@ -20,16 +20,6 @@ typedef struct waypoint {
   struct waypoint *next;
 } waypoint;
 
-int sign(float x) {
-  if (x < 0) {
-    return -1;
-  }
-  else if (x > 0) {
-    return 1;
-  }
-  return 0;
-}
-
 pose rotate(pose p, float angle);
 float pose_distance(pose p1, pose p2);
 bool pose_near(pose p1, pose p2, float position_tol, float angle_tol);

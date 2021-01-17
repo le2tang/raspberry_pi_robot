@@ -14,10 +14,10 @@ typedef struct map {
   pose origin;
 } map;
 
-extern inline bool map_inbounds(map *m, size_t row, size_t col);
-extern inline float map_get(map *m, size_t row, size_t col);
-extern inline float mat_set(map *m, size_t row, size_t col, float data);
-extern inline size_t map_get_index(map *m, size_t row, size_t col);
+bool map_inbounds(map *m, size_t row, size_t col);
+float map_get(map *m, size_t row, size_t col);
+void map_set(map *m, size_t row, size_t col, float data);
+size_t map_get_index(map *m, size_t row, size_t col);
 
 void interest_map_init(map *interest_map, size_t nrows, size_t ncols, float xdelta, float ydelta);
 void interest_map_update(map *interest_map, pose robot_pose, float max_interest, float decay);
