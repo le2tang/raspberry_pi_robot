@@ -21,15 +21,16 @@ typedef struct waypoint {
 } waypoint;
 
 pose rotate(pose p, float angle);
+pose pose_difference(pose pfinal, pose pinit);
 float pose_distance(pose p1, pose p2);
 bool pose_near(pose p1, pose p2, float position_tol, float angle_tol);
 bool position_near(pose p1, pose p2, float position_tol);
 
 unicycle get_controls(pose curr, pose target, unicycle limits);
 void set_motors(unicycle controls, float body_width, float wheel_radius);
-void update_state(pose *state, unicycle controls, float dt);
+pose update_state(pose state, unicycle controls, float dt);
 
-void waypoint_init(waypoint *new_waypoint, pose target, waypoint *prev, waypoint *next);
+waypoint *waypoint_init(pose target, waypoint *prev, waypoint *next);
 void waypoint_set_prev(waypoint *curr, pose target);
 void waypoint_set_next(waypoint *curr, pose target);
 
