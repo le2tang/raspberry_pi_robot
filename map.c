@@ -1,5 +1,6 @@
 #include "map.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "path.h"
@@ -63,5 +64,19 @@ void interest_map_update(map *interest_map, pose robot_pose, float max_interest,
         float new_interest = (current_interest - decay > 0) ? (current_interest - decay) : 0;
         map_set(interest_map, i, j, new_interest);
     }
+  }
+}
+
+void map_print(map *m) {
+  printf("Map %dx%d: (%3f, %3f) @ %3f\n", m->nrows, m->ncols, m->origin.x, m->origin.y, m->origin.theta);
+  for (size_t i = 0; i < m->nrows; ++i) {
+    for (size_t j = 0; j < m->ncols; ++j) {
+      float val = map_get(m, i, j);
+      printf("%.1f", val);
+      if (j < (m->ncols - 1)) {
+        printf(",");
+      }
+    }
+    printf("\n");
   }
 }
