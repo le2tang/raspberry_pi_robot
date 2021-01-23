@@ -4,7 +4,7 @@ OBJECTS = main.o map.o path.o hw.o
 TARGET = robot
 
 $(TARGET): $(OBJECTS)
-	gcc $^ -o $@
+	gcc $^ -o $@ -lwiringPi -lm
 
 %.o: %.c
-	gcc -c -Iinclude -I/usr/local/include -L/usr/local/lib -lwiringPi $< -o $@
+	gcc -c -Iinclude -I/usr/local/include -L/usr/local/lib $< -o $@
